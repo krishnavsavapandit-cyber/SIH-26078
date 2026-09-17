@@ -1,0 +1,66 @@
+{
+  "benchmark_timestamp": "2026-09-18T00:13:00Z",
+  "num_test_scenarios": 1,
+  "models_evaluated": [
+    "Phase_1_Operational_Baseline",
+    "Phase_2_Supervised_CNN",
+    "Phase_3_ST_GNN",
+    "Phase_3_Physics_Informed_UNet",
+    "Phase_3_Conditional_Diffusion"
+  ],
+  "metrics_summary": {
+    "Phase_1_Operational_Baseline": {
+      "f1_score_pct": 71.13,
+      "csi_iou_pct": 55.19,
+      "displacement_error_km": 108.85,
+      "psnr_db": 44.33,
+      "mass_violation_pct": 8.23,
+      "p99_relative_error_pct": 1.44,
+      "latency_ms": 134.82,
+      "physics_compliance_pct": 100.0
+    },
+    "Phase_2_Supervised_CNN": {
+      "f1_score_pct": 75.38,
+      "csi_iou_pct": 60.49,
+      "displacement_error_km": 156.29,
+      "psnr_db": 29.66,
+      "mass_violation_pct": 87.08,
+      "p99_relative_error_pct": 100.0,
+      "latency_ms": 817.45,
+      "physics_compliance_pct": 100.0
+    },
+    "Phase_3_ST_GNN": {
+      "f1_score_pct": 0.95,
+      "csi_iou_pct": 0.48,
+      "displacement_error_km": 443.23,
+      "psnr_db": 29.66,
+      "mass_violation_pct": 87.08,
+      "p99_relative_error_pct": 100.0,
+      "latency_ms": 300.9,
+      "physics_compliance_pct": 100.0
+    },
+    "Phase_3_Physics_Informed_UNet": {
+      "f1_score_pct": 0.95,
+      "csi_iou_pct": 0.48,
+      "displacement_error_km": 443.23,
+      "psnr_db": 27.33,
+      "mass_violation_pct": 98.1,
+      "p99_relative_error_pct": 64.26,
+      "latency_ms": 639.02,
+      "physics_compliance_pct": 100.0
+    },
+    "Phase_3_Conditional_Diffusion": {
+      "f1_score_pct": 0.95,
+      "csi_iou_pct": 0.48,
+      "displacement_error_km": 443.23,
+      "psnr_db": 15.0,
+      "mass_violation_pct": 99.94,
+      "p99_relative_error_pct": 1097.88,
+      "latency_ms": 43878.02,
+      "physics_compliance_pct": 100.0
+    }
+  },
+  "winning_detection_model": "Phase_3_ST_GNN",
+  "winning_downscaling_model": "Phase_3_Physics_Informed_UNet",
+  "best_probabilistic_generator": "Phase_3_Conditional_Diffusion"
+}

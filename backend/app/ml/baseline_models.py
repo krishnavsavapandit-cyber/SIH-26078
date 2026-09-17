@@ -246,4 +246,48 @@ class MLBaselineTrainer:
             "samples_evaluated": len(preds)
         }
 
+    def predict_event_mask(
+        self,
+        precip: np.ndarray,
+        mslp: np.ndarray,
+        temp: np.ndarray,
+        u_wind: np.ndarray,
+        v_wind: np.ndarray
+    ) -> np.ndarray:
+        """
+        Executes single-timestep inference using the trained CNN baseline.
+        Inputs: 2D numpy arrays of shape (H, W).
+        Returns: 2D probability map of shape (H, W).
+        """
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        model = CNNEventDetector().to(device)
+        if self.model_path.exists():
+            try:
+                state_dict = torch.load(self.model_path, map_location=device)
+                model.load_state_dict(state_dict)
+            except Exception:
+                pass
+        model.eval()
+
+        p = np.clip(precip / 100.0, 0.0, 5.0)
+        m = (mslp - 1000.0) / 15.0
+        t = (temp - 300.0) / 10.0
+        u = u_wind / 20.0
+        v = v_wind / 20.0
+
+        stacked = np.stack([p, m, t, u, v], axis=0) # (5, H, W)
+        x_tensor = torch.from_numpy(stacked).unsqueeze(0).float().to(device)
+
+        with torch.no_grad():
+            logits = model(x_tensor)
+            probs = torch.sigmoid(logits).squeeze().cpu().numpy()
+
+        if probs.shape != precip.shape:
+            from scipy.ndimage import zoom
+            scale_y = precip.shape[0] / probs.shape[0]
+            scale_x = precip.shape[1] / probs.shape[1]
+            probs = zoom(probs, (scale_y, scale_x), order=1)
+
+        return np.clip(probs, 0.0, 1.0)
+
 ml_baseline_trainer = MLBaselineTrainer()

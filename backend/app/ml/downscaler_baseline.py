@@ -83,8 +83,13 @@ class DownscalingEngine:
         fine = scipy.ndimage.zoom(coarse_grid, (zoom_y, zoom_x), order=3)
         return np.maximum(0.0, fine).astype(np.float32)
 
-    def ml_downscale(self, coarse_grid: np.ndarray, orography_coarse: np.ndarray = None) -> np.ndarray:
-        """Applies trained CNN super-resolution downscaler."""
+    def ml_downscale(
+        self,
+        coarse_grid: np.ndarray,
+        orography_coarse: np.ndarray = None,
+        target_shape: Tuple[int, int] = None
+    ) -> np.ndarray:
+        """Applies trained CNN super-resolution downscaler with optional target_shape interpolation."""
         self.model.eval()
         if orography_coarse is None:
             orography_coarse = np.zeros_like(coarse_grid)
@@ -99,6 +104,9 @@ class DownscalingEngine:
         with torch.no_grad():
             out_tensor = self.model(inp_tensor)
             out_grid = out_tensor.squeeze().cpu().numpy() * 100.0
+
+        if target_shape is not None and out_grid.shape != target_shape:
+            out_grid = scipy.ndimage.zoom(out_grid, (target_shape[0] / out_grid.shape[0], target_shape[1] / out_grid.shape[1]), order=1)
 
         return np.maximum(0.0, out_grid).astype(np.float32)
 

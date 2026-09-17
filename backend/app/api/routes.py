@@ -19,6 +19,12 @@ from backend.app.pipeline.orchestrator import orchestrator
 from backend.app.core.physics_validator import physics_validator
 from backend.app.ml.downscaler_baseline import downscaling_engine
 from backend.app.ml.explainability import anomaly_explainer
+from backend.app.ml.st_gnn import st_gnn_manager
+from backend.app.ml.advanced_downscaler import advanced_downscaling_manager
+from backend.app.ml.diffusion_experiment import diffusion_engine
+from backend.app.ml.advanced_tracker import advanced_tracker
+from backend.app.ml.benchmark_suite import benchmark_suite, BENCHMARK_RESULTS_PATH
+import json
 
 router = APIRouter(prefix="/api", tags=["Weather Intelligence API"])
 
@@ -395,3 +401,166 @@ def get_provenance(run_id: str, db: Session = Depends(get_db)):
         "parameters": prov.parameters_json,
         "created_at": prov.created_at
     }
+
+# =========================================================================
+# Phase 3 Research & Scientific Benchmarking Endpoints
+# =========================================================================
+
+@router.get("/benchmark")
+def get_benchmark_results():
+    """Returns the latest cross-model scientific benchmark report."""
+    if BENCHMARK_RESULTS_PATH.exists():
+        try:
+            with open(BENCHMARK_RESULTS_PATH, "r") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return benchmark_suite.run_benchmark(num_test_scenarios=1)
+
+@router.post("/benchmark/run")
+def trigger_benchmark(num_scenarios: int = 1):
+    """Executes fresh cross-model benchmark evaluation."""
+    return benchmark_suite.run_benchmark(num_test_scenarios=num_scenarios)
+
+@router.get("/research/st-gnn/{run_id}")
+def get_st_gnn_inference(run_id: str):
+    """Executes Spatio-Temporal GNN message passing across forecast sequence."""
+    nc_path = DATASET_DIR / f"{run_id}.nc"
+    if not nc_path.exists():
+        raise HTTPException(status_code=404, detail="Dataset not found")
+
+    with xr.open_dataset(nc_path) as ds:
+        p_seq = np.mean(ds["precipitation"].values, axis=1) # (T, H, W)
+        m_seq = np.mean(ds["mslp"].values, axis=1)
+        t_seq = np.mean(ds["temperature_2m"].values, axis=1)
+        u_seq = np.mean(ds["u_wind_850"].values, axis=1)
+        v_seq = np.mean(ds["v_wind_850"].values, axis=1)
+
+        res = st_gnn_manager.predict_spatiotemporal_anomalies(p_seq, m_seq, t_seq, u_seq, v_seq)
+        return {
+            "run_id": run_id,
+            "model": res["model"],
+            "success": res["success"],
+            "lead_times": ds["lead_time"].values.tolist(),
+            "probabilities_summary": {
+                "mean_probability": float(np.mean(res["probabilities"])),
+                "max_probability": float(np.max(res["probabilities"])),
+                "high_anomaly_cells": int(np.sum(res["probabilities"] > 0.60))
+            },
+            "centroid_velocities": res["velocities"].tolist(),
+            "fallback_triggered": res.get("fallback_triggered", False)
+        }
+
+@router.get("/research/physics-downscaling/{run_id}/{lead_time}")
+def get_physics_downscaling(run_id: str, lead_time: int):
+    """Runs Physics-Informed Super-Resolution U-Net with mass conservation metrics."""
+    nc_path = DATASET_DIR / f"{run_id}.nc"
+    if not nc_path.exists():
+        raise HTTPException(status_code=404, detail="Dataset not found")
+
+    with xr.open_dataset(nc_path) as ds:
+        leads = ds["lead_time"].values
+        if lead_time not in leads:
+            raise HTTPException(status_code=400, detail="Lead time not found")
+        t_idx = int(np.where(leads == lead_time)[0][0])
+
+        coarse_p = np.mean(ds["precipitation"].values[t_idx], axis=0)
+        coarse_m = np.mean(ds["mslp"].values[t_idx], axis=0)
+        u = np.mean(ds["u_wind_850"].values[t_idx], axis=0)
+        v = np.mean(ds["v_wind_850"].values[t_idx], axis=0)
+        wind = np.sqrt(u**2 + v**2)
+
+        # High-intensity storm patch
+        max_idx = np.unravel_index(np.argmax(coarse_p), coarse_p.shape)
+        cy, cx = max_idx[0], max_idx[1]
+        y0, y1 = max(0, cy - 12), min(coarse_p.shape[0], cy + 12)
+        x0, x1 = max(0, cx - 12), min(coarse_p.shape[1], cx + 12)
+
+        p_patch = coarse_p[y0:y1, x0:x1]
+        m_patch = coarse_m[y0:y1, x0:x1]
+        w_patch = wind[y0:y1, x0:x1]
+        target_shape = (p_patch.shape[0] * 5, p_patch.shape[1] * 5)
+
+        pi_res = advanced_downscaling_manager.downscale_field(
+            coarse_precip=p_patch,
+            coarse_mslp=m_patch,
+            coarse_wind=w_patch,
+            target_shape=target_shape
+        )
+
+        return {
+            "run_id": run_id,
+            "lead_time": lead_time,
+            "model": "PhysicsInformedUNetDownscaler",
+            "coarse_patch": p_patch.tolist(),
+            "physics_fine_patch": pi_res["fine_field"].tolist(),
+            "mean_intensity": pi_res["mean_fine"],
+            "peak_intensity": pi_res["max_fine"],
+            "p99_intensity": pi_res["p99_fine"],
+            "fallback_triggered": pi_res.get("fallback_triggered", False)
+        }
+
+@router.get("/research/diffusion/{run_id}/{lead_time}")
+def get_diffusion_realizations(run_id: str, lead_time: int, num_members: int = 2):
+    """Generates stochastic ensemble downscaled realizations via Conditional Diffusion."""
+    nc_path = DATASET_DIR / f"{run_id}.nc"
+    if not nc_path.exists():
+        raise HTTPException(status_code=404, detail="Dataset not found")
+
+    with xr.open_dataset(nc_path) as ds:
+        leads = ds["lead_time"].values
+        if lead_time not in leads:
+            raise HTTPException(status_code=400, detail="Lead time not found")
+        t_idx = int(np.where(leads == lead_time)[0][0])
+        coarse_p = np.mean(ds["precipitation"].values[t_idx], axis=0)
+
+        # Storm patch for fast CPU diffusion
+        max_idx = np.unravel_index(np.argmax(coarse_p), coarse_p.shape)
+        cy, cx = max_idx[0], max_idx[1]
+        y0, y1 = max(0, cy - 8), min(coarse_p.shape[0], cy + 8)
+        x0, x1 = max(0, cx - 8), min(coarse_p.shape[1], cx + 8)
+        p_patch = coarse_p[y0:y1, x0:x1]
+
+        diff_res = diffusion_engine.sample_ensemble_realizations(
+            coarse_precip=p_patch,
+            num_members=num_members,
+            fine_shape=(p_patch.shape[0] * 5, p_patch.shape[1] * 5)
+        )
+
+        return {
+            "run_id": run_id,
+            "lead_time": lead_time,
+            "model": diff_res["model"],
+            "num_members": num_members,
+            "ensemble_mean": diff_res["ensemble_mean"].tolist(),
+            "ensemble_spread": diff_res["ensemble_spread"].tolist(),
+            "fallback_triggered": diff_res.get("fallback_triggered", False)
+        }
+
+@router.get("/research/tracking-hypotheses/{run_id}")
+def get_tracking_hypotheses(run_id: str, db: Session = Depends(get_db)):
+    """Executes Advanced Multi-Hypothesis Tracker across run detections."""
+    events = crud.get_events_for_run(db, run_id)
+    if not events:
+        raise HTTPException(status_code=404, detail="No events found for run")
+
+    dets_by_lead: Dict[int, List[Dict[str, Any]]] = {}
+    for evt in events:
+        for pt in evt.trajectory_points_json:
+            lt = pt["lead_time"]
+            if lt not in dets_by_lead:
+                dets_by_lead[lt] = []
+            det_item = {
+                "centroid_lat": pt["lat"],
+                "centroid_lon": pt["lon"],
+                "bounding_box": pt.get("bounding_box", [pt["lat"]-0.5, pt["lon"]-0.5, pt["lat"]+0.5, pt["lon"]+0.5]),
+                "peak_precip_mm": pt["peak_precip_mm"],
+                "min_mslp_hpa": pt["min_mslp_hpa"],
+                "severity_score": pt.get("severity_score", 0.8),
+                "lead_time": lt
+            }
+            dets_by_lead[lt].append(det_item)
+
+    mht_res = advanced_tracker.track_multi_hypothesis(dets_by_lead)
+    return mht_res
+

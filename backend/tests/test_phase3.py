@@ -16,6 +16,7 @@ from backend.app.ml.spherical_graph import spherical_graph, SphericalAtmospheric
 from backend.app.ml.st_gnn import SpatioTemporalGNN, SphericalGraphConv, st_gnn_manager
 from backend.app.ml.advanced_downscaler import PhysicsInformedUNetDownscaler, PhysicsInformedLoss, advanced_downscaling_manager
 from backend.app.ml.diffusion_experiment import ConditionalUNetDenoiser, AtmosphericDiffusionEngine, diffusion_engine
+from backend.app.ml.advanced_tracker import advanced_tracker, AdvancedMultiHypothesisTracker
 from backend.app.ml.benchmark_suite import benchmark_suite
 
 class TestPhase3ResearchSuite(unittest.TestCase):
@@ -72,6 +73,28 @@ class TestPhase3ResearchSuite(unittest.TestCase):
         self.assertTrue(res["success"])
         self.assertEqual(res["probabilities"].shape, (leads, H, W))
         self.assertEqual(res["velocities"].shape, (leads, 2))
+
+    def test_advanced_tracker_multi_hypothesis(self):
+        """Verifies Phase 3C Advanced Multi-Hypothesis Tracker execution and confidence metrics."""
+        dets_by_lead = {
+            0: [{"centroid_lat": 18.0, "centroid_lon": 84.0, "bounding_box": [17, 83, 19, 85], "peak_precip_mm": 85.0, "min_mslp_hpa": 998.0, "severity_score": 0.88, "lead_time": 0}],
+            24: [
+                {"centroid_lat": 18.8, "centroid_lon": 83.2, "bounding_box": [17.8, 82.2, 19.8, 84.2], "peak_precip_mm": 95.0, "min_mslp_hpa": 994.0, "severity_score": 0.92, "lead_time": 24},
+                {"centroid_lat": 18.2, "centroid_lon": 85.5, "bounding_box": [17.5, 84.5, 19.0, 86.5], "peak_precip_mm": 55.0, "min_mslp_hpa": 1004.0, "severity_score": 0.65, "lead_time": 24} # split cell
+            ],
+            48: [{"centroid_lat": 19.5, "centroid_lon": 82.4, "bounding_box": [18.5, 81.4, 20.5, 83.4], "peak_precip_mm": 110.0, "min_mslp_hpa": 990.0, "severity_score": 0.95, "lead_time": 48}]
+        }
+
+        res = advanced_tracker.track_multi_hypothesis(dets_by_lead)
+        self.assertTrue(res["success"])
+        self.assertEqual(res["model"], "AdvancedMultiHypothesisTracker")
+        self.assertGreaterEqual(len(res["consensus_tracks"]), 1)
+        self.assertGreaterEqual(res["total_hypotheses_evaluated"], 1)
+
+        primary = res["consensus_tracks"][0]
+        self.assertIn("cumulative_confidence", primary)
+        self.assertGreater(primary["cumulative_confidence"], 0.5)
+        self.assertEqual(len(primary["trajectory_points"]), 3)
 
     def test_physics_informed_unet_loss_and_forward(self):
         """Verifies Physics-Informed U-Net downscaler architecture and mass conservation loss."""

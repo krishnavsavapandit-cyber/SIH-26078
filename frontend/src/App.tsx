@@ -7,6 +7,7 @@ import { TrajectoryConeViewer } from './components/TrajectoryConeViewer';
 import { VerificationDashboard } from './components/VerificationDashboard';
 import { AlertDesk } from './components/AlertDesk';
 import { ProvenanceInspector } from './components/ProvenanceInspector';
+import { Phase3ResearchStudio } from './components/Phase3ResearchStudio';
 import {
   CloudLightning,
   Play,
@@ -20,6 +21,7 @@ import {
   Sliders,
   CheckCircle2,
   Sparkles,
+  Award,
   Info
 } from 'lucide-react';
 
@@ -30,7 +32,7 @@ export const App: React.FC = () => {
   const [currentLead, setCurrentLead] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [playSpeed, setPlaySpeed] = useState<number>(1);
-  const [activeTab, setActiveTab] = useState<'map' | 'verification' | 'alerts' | 'provenance'>('map');
+  const [activeTab, setActiveTab] = useState<'map' | 'verification' | 'alerts' | 'provenance' | 'research'>('map');
 
   // Active Map Layer
   const [activeLayer, setActiveLayer] = useState<'precipitation' | 'efi' | 'mslp' | 'wind'>('precipitation');
@@ -275,6 +277,18 @@ export const App: React.FC = () => {
               <Cpu className="w-4 h-4 text-amber-400" />
               <span>Provenance & Audit</span>
             </button>
+
+            <button
+              onClick={() => setActiveTab('research')}
+              className={`px-4 py-2 rounded-lg font-bold flex items-center space-x-2 transition ${
+                activeTab === 'research'
+                  ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50 shadow-lg shadow-purple-500/10'
+                  : 'bg-slate-900/60 text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-slate-800'
+              }`}
+            >
+              <Award className="w-4 h-4 text-purple-400" />
+              <span>Phase 3 Research & Benchmark</span>
+            </button>
           </div>
 
           {/* Active Layer Toggles */}
@@ -360,6 +374,11 @@ export const App: React.FC = () => {
         {/* Tab 4: Provenance & Cryptographic Audit */}
         {activeTab === 'provenance' && (
           <ProvenanceInspector provenance={provenance} />
+        )}
+
+        {/* Tab 5: Phase 3 Research Studio & Cross-Model Benchmarks */}
+        {activeTab === 'research' && (
+          <Phase3ResearchStudio runId={currentRunId} currentLeadTime={currentLead} />
         )}
       </main>
 
