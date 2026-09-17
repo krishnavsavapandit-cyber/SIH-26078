@@ -1,0 +1,14 @@
+{
+  "title": "30-Year Reference Climatology (Monsoon Season)",
+  "period": "1991-2020 Baseline Equivalent",
+  "domain": "South Asian Monsoon Region",
+  "grid_res_deg": 0.25,
+  "num_lats": 129,
+  "num_lons": 121,
+  "variables_profiled": [
+    "precipitation",
+    "mslp",
+    "wind",
+    "temperature"
+  ]
+}
