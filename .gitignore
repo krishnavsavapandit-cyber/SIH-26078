@@ -15,6 +15,7 @@ build/
 
 # Data artifacts
 backend/storage/datasets/*.nc
+backend/storage/datasets/*.json
 backend/storage/*.db
 backend/storage/models/*.pt
 

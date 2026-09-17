@@ -1,7 +1,8 @@
 """
 FastAPI REST API Routes for SIH-26078 Extreme Weather Intelligence System.
 Exposes calculated meteorological fields, EFI maps, detections, trajectories,
-uncertainty cones, verification metrics, alerts, and execution controls.
+uncertainty cones, verification metrics, alerts, downscaling comparisons,
+physics audits, explainability diagnostics, and execution controls.
 """
 
 from typing import List, Optional, Dict, Any
@@ -15,6 +16,9 @@ from backend.app.config import DATASET_DIR, domain_config
 from backend.app.db.database import get_db
 from backend.app.db import crud
 from backend.app.pipeline.orchestrator import orchestrator
+from backend.app.core.physics_validator import physics_validator
+from backend.app.ml.downscaler_baseline import downscaling_engine
+from backend.app.ml.explainability import anomaly_explainer
 
 router = APIRouter(prefix="/api", tags=["Weather Intelligence API"])
 
@@ -30,7 +34,7 @@ def health_check():
     return {
         "status": "healthy",
         "service": "SIH-26078 Weather Anomaly Intelligence Backend",
-        "version": "1.0.0",
+        "version": "2.0.0-phase2-competition-core",
         "domain": "India & South Asia"
     }
 
@@ -111,7 +115,7 @@ def get_run_details(run_id: str, db: Session = Depends(get_db)):
         } if ver else None,
         "alerts_count": len(alerts),
         "provenance": {
-            "model_version": prov.model_version if prov else "v1.0.0",
+            "model_version": prov.model_version if prov else "v2.0.0",
             "sha256": prov.dataset_sha256 if prov else None
         } if prov else None
     }
@@ -121,7 +125,6 @@ def list_events(run_id: Optional[str] = None, db: Session = Depends(get_db)):
     if run_id:
         events = crud.get_events_for_run(db, run_id)
     else:
-        # Get latest run's events
         runs = crud.get_all_runs(db)
         if not runs:
             return []
@@ -213,7 +216,7 @@ def get_field_data(
         t_idx = int(np.where(leads == lead_time)[0][0])
         
         if variable.startswith("gt_"):
-            raw_field = ds[variable].values[t_idx] # (lats, lons)
+            raw_field = ds[variable].values[t_idx]
             ens_mean = raw_field
             ens_std = np.zeros_like(raw_field)
         elif member is not None:
@@ -221,11 +224,10 @@ def get_field_data(
             ens_mean = raw_field
             ens_std = np.zeros_like(raw_field)
         else:
-            raw_field = ds[variable].values[t_idx] # (members, lats, lons)
+            raw_field = ds[variable].values[t_idx]
             ens_mean = np.mean(raw_field, axis=0)
             ens_std = np.std(raw_field, axis=0)
 
-        # Downsample or serialize grid for web rendering
         return {
             "run_id": run_id,
             "lead_time": lead_time,
@@ -266,6 +268,91 @@ def get_efi_data(run_id: str, lead_time: int, variable: str = "precipitation"):
             "peak_efi": float(np.max(efi_res["efi"])),
             "max_sot": float(np.max(efi_res["sot"]))
         }
+
+@router.get("/downscaling/{run_id}/{lead_time}")
+def get_downscaling_comparison(run_id: str, lead_time: int):
+    nc_path = DATASET_DIR / f"{run_id}.nc"
+    if not nc_path.exists():
+        raise HTTPException(status_code=404, detail="Dataset not found")
+
+    with xr.open_dataset(nc_path) as ds:
+        leads = ds["lead_time"].values
+        if lead_time not in leads:
+            raise HTTPException(status_code=400, detail="Lead time not found")
+        t_idx = int(np.where(leads == lead_time)[0][0])
+        coarse_p = np.mean(ds["precipitation"].values[t_idx], axis=0) # (lats, lons)
+        gt_p = ds["gt_precipitation"].values[t_idx]
+        
+        # Subsample high-intensity storm patch (e.g. 24x24 coarse -> 120x120 fine)
+        max_idx = np.unravel_index(np.argmax(coarse_p), coarse_p.shape)
+        cy, cx = max_idx[0], max_idx[1]
+        
+        y0, y1 = max(0, cy - 12), min(coarse_p.shape[0], cy + 12)
+        x0, x1 = max(0, cx - 12), min(coarse_p.shape[1], cx + 12)
+        
+        patch_coarse = coarse_p[y0:y1, x0:x1]
+        # Fine ground truth target (approx 5x)
+        fine_gt_patch = downscaling_engine.bicubic_downscale(gt_p[y0:y1, x0:x1], (patch_coarse.shape[0] * 5, patch_coarse.shape[1] * 5))
+        
+        comp_metrics = downscaling_engine.compare_downscalers(patch_coarse, fine_gt_patch)
+        
+        bicubic_grid = downscaling_engine.bicubic_downscale(patch_coarse, fine_gt_patch.shape)
+        ml_grid = downscaling_engine.ml_downscale(patch_coarse)
+
+        return {
+            "run_id": run_id,
+            "lead_time": lead_time,
+            "metrics": comp_metrics,
+            "coarse_patch": patch_coarse.tolist(),
+            "bicubic_patch": bicubic_grid.tolist(),
+            "ml_patch": ml_grid.tolist(),
+            "fine_gt_patch": fine_gt_patch.tolist()
+        }
+
+@router.get("/physics-audit/{run_id}/{lead_time}")
+def get_physics_audit(run_id: str, lead_time: int):
+    nc_path = DATASET_DIR / f"{run_id}.nc"
+    if not nc_path.exists():
+        raise HTTPException(status_code=404, detail="Dataset not found")
+
+    with xr.open_dataset(nc_path) as ds:
+        leads = ds["lead_time"].values
+        if lead_time not in leads:
+            raise HTTPException(status_code=400, detail="Lead time not found")
+        t_idx = int(np.where(leads == lead_time)[0][0])
+        
+        p = np.mean(ds["precipitation"].values[t_idx], axis=0)
+        t = np.mean(ds["temperature_2m"].values[t_idx], axis=0)
+        rh = np.mean(ds["relative_humidity"].values[t_idx], axis=0)
+        u = np.mean(ds["u_wind_850"].values[t_idx], axis=0)
+        v = np.mean(ds["v_wind_850"].values[t_idx], axis=0)
+        mslp = np.mean(ds["mslp"].values[t_idx], axis=0)
+
+        res = physics_validator.validate_atmospheric_state(
+            precip=p, temperature_2m=t, relative_humidity=rh,
+            u_wind=u, v_wind=v, mslp=mslp
+        )
+        return res.dict()
+
+@router.get("/explainability/{run_id}/{event_id}")
+def get_explainability(run_id: str, event_id: str, db: Session = Depends(get_db)):
+    evt = crud.get_event_by_id(db, event_id)
+    if not evt:
+        raise HTTPException(status_code=404, detail="Event not found")
+    
+    pts = evt.trajectory_points_json
+    peak_pt = max(pts, key=lambda x: x["peak_precip_mm"])
+    
+    diag = anomaly_explainer.explain_detection(
+        peak_efi=peak_pt.get("peak_efi", 0.85),
+        z_score=2.8,
+        sot_val=peak_pt.get("max_sot", 1.2),
+        precip_mm=peak_pt["peak_precip_mm"],
+        wind_ms=peak_pt["max_wind_ms"],
+        mslp_deficit=1012.0 - peak_pt["min_mslp_hpa"],
+        ens_spread=4.5
+    )
+    return diag
 
 @router.get("/verification/{run_id}")
 def get_verification_report(run_id: str, db: Session = Depends(get_db)):
