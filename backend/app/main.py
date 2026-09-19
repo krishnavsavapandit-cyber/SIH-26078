@@ -3,10 +3,12 @@ Main FastAPI Application Entrypoint for SIH-26078.
 """
 
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pathlib import Path
+import os
 
 from backend.app.api.routes import router
 from backend.app.db.database import init_db, SessionLocal
@@ -53,10 +55,31 @@ app.add_middleware(
 
 app.include_router(router)
 
-@app.get("/")
-def root():
-    return {
-        "message": "SIH-26078 Extreme Weather Anomaly Intelligence Backend",
-        "documentation": "/docs",
-        "status": "operational"
-    }
+# Resolve path to compiled frontend/dist directory
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+FRONTEND_DIST_DIR = BASE_DIR / "frontend" / "dist"
+
+if FRONTEND_DIST_DIR.exists() and (FRONTEND_DIST_DIR / "index.html").exists():
+    # Mount assets directory if it exists
+    assets_dir = FRONTEND_DIST_DIR / "assets"
+    if assets_dir.exists():
+        app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def serve_spa(full_path: str):
+        # Exclude /api, /docs, /openapi.json, /redoc from SPA catch-all
+        if full_path.startswith("api") or full_path in ["docs", "openapi.json", "redoc"]:
+            return None
+        file_target = FRONTEND_DIST_DIR / full_path
+        if full_path and file_target.is_file():
+            return FileResponse(file_target)
+        return FileResponse(FRONTEND_DIST_DIR / "index.html")
+else:
+    @app.get("/")
+    def root():
+        return {
+            "message": "SIH-26078 Extreme Weather Anomaly Intelligence Backend",
+            "documentation": "/docs",
+            "status": "operational"
+        }
+

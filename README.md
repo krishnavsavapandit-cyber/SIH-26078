@@ -149,29 +149,37 @@ cd SIH-26078
 
 ---
 
-### 2. Backend Launch
+### 2. Backend Launch & Local Dev
 ```bash
 # 1. Install dependencies
 pip install -r requirements.txt   # (On Windows: py -m pip install -r requirements.txt)
 
 # 2. Start FastAPI Server
-uvicorn backend.app.main:app --host 127.0.0.1 --port 8000
+uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-8000}
 ```
-- **API Server Running**: `http://127.0.0.1:8000`
+- **API Server / Dashboard Running**: `http://127.0.0.1:8000`
 - **Interactive OpenAPI Documentation**: `http://127.0.0.1:8000/docs`
 - **System Health Endpoint**: `http://127.0.0.1:8000/api/health`
 
 ---
 
-### 3. Frontend Launch
-In a new terminal window:
+### 3. Render Single-Service Deployment Command
+When deploying as a single unified service on Render:
+- **Build Command**: `pip install -r requirements.txt && cd frontend && npm install && npm run build && cd ..`
+- **Start Command**: `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`
+*FastAPI automatically serves `frontend/dist` at the root `/` while preserving all `/api/*` routes and `/docs`.*
+
+---
+
+### 4. Frontend Standalone Dev Launch (Optional)
+In a separate terminal for live HMR development:
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-- **Interactive Dashboard**: `http://localhost:3000`
-- *The frontend automatically communicates with the backend via Vite's proxy.*
+- **Interactive Dashboard (Vite Dev)**: `http://localhost:3000`
+- *The Vite dev server automatically proxies `/api/*` to `http://127.0.0.1:8000`.*
 
 ---
 
