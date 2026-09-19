@@ -42,6 +42,8 @@ class TestVerificationEngine(unittest.TestCase):
                     "v_wind_850": np.zeros((1, 5, 10, 10)),
                     "gt_v_wind_850": np.zeros((1, 10, 10))
                 }
+            def __contains__(self, key):
+                return key in self.data
             def __getitem__(self, key):
                 class ArrayWrapper:
                     def __init__(self, arr):

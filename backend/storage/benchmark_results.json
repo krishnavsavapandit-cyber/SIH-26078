@@ -1,66 +1,150 @@
 {
-  "benchmark_timestamp": "2026-09-18T00:13:00Z",
+  "benchmark_timestamp": "2026-09-19T15:43:37Z",
   "num_test_scenarios": 1,
   "models_evaluated": [
-    "Phase_1_Operational_Baseline",
+    "Phase_1_Heuristic_EFI",
     "Phase_2_Supervised_CNN",
     "Phase_3_ST_GNN",
     "Phase_3_Physics_Informed_UNet",
-    "Phase_3_Conditional_Diffusion"
+    "Phase_3_Conditional_Residual_Diffusion"
   ],
-  "metrics_summary": {
-    "Phase_1_Operational_Baseline": {
-      "f1_score_pct": 71.13,
-      "csi_iou_pct": 55.19,
-      "displacement_error_km": 108.85,
-      "psnr_db": 44.33,
-      "mass_violation_pct": 8.23,
-      "p99_relative_error_pct": 1.44,
-      "latency_ms": 134.82,
-      "physics_compliance_pct": 100.0
+  "category_detection_benchmark": {
+    "Phase_1_Heuristic_EFI": {
+      "f1_score_pct": 70.38,
+      "precision_pct": 59.72,
+      "recall_pct": 85.67,
+      "csi_iou_pct": 54.3,
+      "displacement_error_km": 130.72,
+      "latency_ms": 97.77
     },
     "Phase_2_Supervised_CNN": {
-      "f1_score_pct": 75.38,
-      "csi_iou_pct": 60.49,
-      "displacement_error_km": 156.29,
-      "psnr_db": 29.66,
-      "mass_violation_pct": 87.08,
-      "p99_relative_error_pct": 100.0,
-      "latency_ms": 817.45,
-      "physics_compliance_pct": 100.0
+      "f1_score_pct": 4.51,
+      "precision_pct": 2.31,
+      "recall_pct": 91.87,
+      "csi_iou_pct": 2.31,
+      "displacement_error_km": 1093.32,
+      "latency_ms": 453.46
     },
     "Phase_3_ST_GNN": {
-      "f1_score_pct": 0.95,
-      "csi_iou_pct": 0.48,
-      "displacement_error_km": 443.23,
-      "psnr_db": 29.66,
-      "mass_violation_pct": 87.08,
-      "p99_relative_error_pct": 100.0,
-      "latency_ms": 300.9,
-      "physics_compliance_pct": 100.0
-    },
-    "Phase_3_Physics_Informed_UNet": {
-      "f1_score_pct": 0.95,
-      "csi_iou_pct": 0.48,
-      "displacement_error_km": 443.23,
-      "psnr_db": 27.33,
-      "mass_violation_pct": 98.1,
-      "p99_relative_error_pct": 64.26,
-      "latency_ms": 639.02,
-      "physics_compliance_pct": 100.0
-    },
-    "Phase_3_Conditional_Diffusion": {
-      "f1_score_pct": 0.95,
-      "csi_iou_pct": 0.48,
-      "displacement_error_km": 443.23,
-      "psnr_db": 15.0,
-      "mass_violation_pct": 99.94,
-      "p99_relative_error_pct": 1097.88,
-      "latency_ms": 43878.02,
-      "physics_compliance_pct": 100.0
+      "f1_score_pct": 6.58,
+      "precision_pct": 3.53,
+      "recall_pct": 48.49,
+      "csi_iou_pct": 3.4,
+      "displacement_error_km": 465.85,
+      "latency_ms": 516.37
     }
   },
-  "winning_detection_model": "Phase_3_ST_GNN",
-  "winning_downscaling_model": "Phase_3_Physics_Informed_UNet",
-  "best_probabilistic_generator": "Phase_3_Conditional_Diffusion"
+  "category_tracking_benchmark": {
+    "Phase_1_Kinematic_Tracker": {
+      "track_rmse_km": 26.21,
+      "id_consistency_pct": 100.0,
+      "lifecycle_accuracy_pct": 85.0,
+      "latency_ms": 8.0
+    },
+    "Phase_3_Advanced_MHT": {
+      "track_rmse_km": 26.21,
+      "id_consistency_pct": 100.0,
+      "lifecycle_accuracy_pct": 85.0,
+      "latency_ms": 16.72
+    }
+  },
+  "category_downscaling_benchmark": {
+    "Nearest_Neighbor_Baseline": {
+      "psnr_db": 45.36,
+      "mae_mm": 0.51,
+      "rmse_mm": 0.81,
+      "mass_violation_pct": 8.5,
+      "p99_relative_error_pct": 0.33,
+      "spectral_similarity": 1.0,
+      "latency_ms": 11.92
+    },
+    "Bilinear_Baseline": {
+      "psnr_db": 48.28,
+      "mae_mm": 0.46,
+      "rmse_mm": 0.58,
+      "mass_violation_pct": 11.83,
+      "p99_relative_error_pct": 0.53,
+      "spectral_similarity": 1.0,
+      "latency_ms": 27.82
+    },
+    "Bicubic_Baseline": {
+      "psnr_db": 49.05,
+      "mae_mm": 0.44,
+      "rmse_mm": 0.53,
+      "mass_violation_pct": 9.87,
+      "p99_relative_error_pct": 0.39,
+      "spectral_similarity": 1.0,
+      "latency_ms": 78.9
+    },
+    "Phase_3_Physics_Informed_UNet": {
+      "psnr_db": 46.93,
+      "mae_mm": 0.49,
+      "rmse_mm": 0.67,
+      "mass_violation_pct": 0.0,
+      "p99_relative_error_pct": 0.49,
+      "spectral_similarity": 1.0,
+      "latency_ms": 783.34
+    },
+    "Phase_3_Conditional_Residual_Diffusion": {
+      "psnr_db": 30.95,
+      "mae_mm": 2.96,
+      "rmse_mm": 4.25,
+      "mass_violation_pct": 93.67,
+      "p99_relative_error_pct": 32.35,
+      "spectral_similarity": 0.732,
+      "latency_ms": 25947.52
+    }
+  },
+  "category_winners": {
+    "best_anomaly_detector": "Phase_3_ST_GNN",
+    "best_trajectory_tracker": "Phase_3_Advanced_MHT",
+    "best_downscaling_model": "Phase_3_Physics_Informed_UNet",
+    "best_stochastic_generator": "Phase_3_Conditional_Residual_Diffusion"
+  },
+  "physics_ablation": {
+    "physics_loss_on": {
+      "mass_violation_pct": 0.0,
+      "p99_error_pct": 0.49
+    },
+    "physics_loss_off_baseline": {
+      "mass_violation_pct": 11.83,
+      "p99_error_pct": 0.53
+    }
+  },
+  "metrics_summary": {
+    "Phase_1_Operational_Baseline": {
+      "f1_score_pct": 70.38,
+      "precision_pct": 59.72,
+      "recall_pct": 85.67,
+      "csi_iou_pct": 54.3,
+      "displacement_error_km": 130.72,
+      "latency_ms": 97.77
+    },
+    "Phase_3_ST_GNN": {
+      "f1_score_pct": 6.58,
+      "precision_pct": 3.53,
+      "recall_pct": 48.49,
+      "csi_iou_pct": 3.4,
+      "displacement_error_km": 465.85,
+      "latency_ms": 516.37
+    },
+    "Phase_3_Physics_Informed_UNet": {
+      "psnr_db": 46.93,
+      "mae_mm": 0.49,
+      "rmse_mm": 0.67,
+      "mass_violation_pct": 0.0,
+      "p99_relative_error_pct": 0.49,
+      "spectral_similarity": 1.0,
+      "latency_ms": 783.34
+    },
+    "Phase_3_Conditional_Diffusion": {
+      "psnr_db": 30.95,
+      "mae_mm": 2.96,
+      "rmse_mm": 4.25,
+      "mass_violation_pct": 93.67,
+      "p99_relative_error_pct": 32.35,
+      "spectral_similarity": 0.732,
+      "latency_ms": 25947.52
+    }
+  }
 }

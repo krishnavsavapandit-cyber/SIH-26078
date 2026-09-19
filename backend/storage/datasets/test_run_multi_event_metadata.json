@@ -1,0 +1,468 @@
+{
+  "event_id": "EVT_MULTI_9322",
+  "event_name": "Dual Simultaneous Weather Extremes (Cyclone + Heat Dome)",
+  "scenario_type": "multi_event",
+  "event_1": {
+    "event_id": "EVT_CYC_8270",
+    "event_name": "Bay of Bengal Cyclone",
+    "scenario_type": "cyclone",
+    "start_lat": 15.991357467150582,
+    "start_lon": 87.45858697466541,
+    "peak_deficit_hpa": 24.237528002182152,
+    "trajectory": [
+      {
+        "lead_time": 0,
+        "lat": 15.991357467150582,
+        "lon": 87.45858697466541,
+        "intensity_metric": 6.0,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 6,
+        "lat": 16.36021814617472,
+        "lon": 86.72983697466542,
+        "intensity_metric": 8.27969100027277,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 12,
+        "lat": 16.72676766377555,
+        "lon": 85.9935869746654,
+        "intensity_metric": 10.559382000545538,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 18,
+        "lat": 17.08875176699431,
+        "lon": 85.24983697466541,
+        "intensity_metric": 12.839073000818306,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 24,
+        "lat": 17.44402861852607,
+        "lon": 84.4985869746654,
+        "intensity_metric": 15.118764001091076,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 30,
+        "lat": 17.79062153586251,
+        "lon": 83.73983697466541,
+        "intensity_metric": 17.398455001363846,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 36,
+        "lat": 18.12676766377555,
+        "lon": 82.97358697466541,
+        "intensity_metric": 19.678146001636613,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 42,
+        "lat": 18.450961381663603,
+        "lon": 82.1998369746654,
+        "intensity_metric": 21.957837001909382,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 48,
+        "lat": 18.761991376927675,
+        "lon": 81.41858697466542,
+        "intensity_metric": 24.237528002182152,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 54,
+        "lat": 19.058970471507667,
+        "lon": 80.62983697466541,
+        "intensity_metric": 24.237528002182152,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 60,
+        "lat": 19.341357467150583,
+        "lon": 79.83358697466541,
+        "intensity_metric": 24.237528002182152,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 66,
+        "lat": 19.608970471507668,
+        "lon": 79.02983697466541,
+        "intensity_metric": 24.237528002182152,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 72,
+        "lat": 19.861991376927676,
+        "lon": 78.2185869746654,
+        "intensity_metric": 24.237528002182152,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 78,
+        "lat": 20.100961381663602,
+        "lon": 77.3998369746654,
+        "intensity_metric": 24.237528002182152,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 84,
+        "lat": 20.32676766377555,
+        "lon": 76.57358697466542,
+        "intensity_metric": 21.813775201963942,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 90,
+        "lat": 20.54062153586251,
+        "lon": 75.73983697466541,
+        "intensity_metric": 19.390022401745725,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 96,
+        "lat": 20.74402861852607,
+        "lon": 74.8985869746654,
+        "intensity_metric": 16.966269601527504,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 102,
+        "lat": 20.93875176699431,
+        "lon": 74.04983697466541,
+        "intensity_metric": 14.542516801309294,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 108,
+        "lat": 21.12676766377555,
+        "lon": 73.19358697466541,
+        "intensity_metric": 12.118764001091076,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 114,
+        "lat": 21.31021814617472,
+        "lon": 72.32983697466541,
+        "intensity_metric": 9.695011200872864,
+        "event_type": "cyclone"
+      },
+      {
+        "lead_time": 120,
+        "lat": 21.491357467150582,
+        "lon": 71.45858697466541,
+        "intensity_metric": 7.271258400654647,
+        "event_type": "cyclone"
+      }
+    ]
+  },
+  "event_2": {
+    "event_id": "EVT_HEAT_6734",
+    "event_name": "Northwest India Heat Dome",
+    "scenario_type": "heat_dome",
+    "start_lat": 26.337498258560775,
+    "start_lon": 72.34991220536301,
+    "peak_anomaly_k": 7.607371121880535,
+    "trajectory": [
+      {
+        "lead_time": 0,
+        "lat": 26.337498258560775,
+        "lon": 72.34991220536301,
+        "intensity_metric": 3.0,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 6,
+        "lat": 26.427498258560775,
+        "lon": 72.47491220536301,
+        "intensity_metric": 3.7678951869800894,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 12,
+        "lat": 26.517498258560774,
+        "lon": 72.59991220536301,
+        "intensity_metric": 4.535790373960179,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 18,
+        "lat": 26.607498258560774,
+        "lon": 72.72491220536301,
+        "intensity_metric": 5.303685560940267,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 24,
+        "lat": 26.697498258560774,
+        "lon": 72.84991220536301,
+        "intensity_metric": 6.071580747920357,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 30,
+        "lat": 26.787498258560774,
+        "lon": 72.97491220536301,
+        "intensity_metric": 6.839475934900445,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 36,
+        "lat": 26.877498258560774,
+        "lon": 73.09991220536301,
+        "intensity_metric": 7.607371121880535,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 42,
+        "lat": 26.967498258560774,
+        "lon": 73.22491220536301,
+        "intensity_metric": 7.607371121880535,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 48,
+        "lat": 27.057498258560774,
+        "lon": 73.34991220536301,
+        "intensity_metric": 7.607371121880535,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 54,
+        "lat": 27.147498258560773,
+        "lon": 73.47491220536301,
+        "intensity_metric": 7.607371121880535,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 60,
+        "lat": 27.237498258560773,
+        "lon": 73.59991220536301,
+        "intensity_metric": 7.607371121880535,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 66,
+        "lat": 27.327498258560773,
+        "lon": 73.72491220536301,
+        "intensity_metric": 7.607371121880535,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 72,
+        "lat": 27.417498258560776,
+        "lon": 73.84991220536301,
+        "intensity_metric": 7.607371121880535,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 78,
+        "lat": 27.507498258560776,
+        "lon": 73.97491220536301,
+        "intensity_metric": 7.607371121880535,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 84,
+        "lat": 27.597498258560776,
+        "lon": 74.09991220536301,
+        "intensity_metric": 7.607371121880535,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 90,
+        "lat": 27.687498258560776,
+        "lon": 74.22491220536301,
+        "intensity_metric": 7.607371121880535,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 96,
+        "lat": 27.777498258560776,
+        "lon": 74.34991220536301,
+        "intensity_metric": 6.8466340096924805,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 102,
+        "lat": 27.867498258560776,
+        "lon": 74.47491220536301,
+        "intensity_metric": 6.085896897504428,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 108,
+        "lat": 27.957498258560776,
+        "lon": 74.59991220536301,
+        "intensity_metric": 5.325159785316374,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 114,
+        "lat": 28.047498258560775,
+        "lon": 74.72491220536301,
+        "intensity_metric": 4.5644226731283215,
+        "event_type": "heat_dome"
+      },
+      {
+        "lead_time": 120,
+        "lat": 28.137498258560775,
+        "lon": 74.84991220536301,
+        "intensity_metric": 3.8036855609402673,
+        "event_type": "heat_dome"
+      }
+    ]
+  },
+  "trajectory": [
+    {
+      "lead_time": 0,
+      "lat": 15.991357467150582,
+      "lon": 87.45858697466541,
+      "primary_intensity": 6.0,
+      "secondary_intensity": 3.0
+    },
+    {
+      "lead_time": 6,
+      "lat": 16.36021814617472,
+      "lon": 86.72983697466542,
+      "primary_intensity": 8.27969100027277,
+      "secondary_intensity": 3.7678951869800894
+    },
+    {
+      "lead_time": 12,
+      "lat": 16.72676766377555,
+      "lon": 85.9935869746654,
+      "primary_intensity": 10.559382000545538,
+      "secondary_intensity": 4.535790373960179
+    },
+    {
+      "lead_time": 18,
+      "lat": 17.08875176699431,
+      "lon": 85.24983697466541,
+      "primary_intensity": 12.839073000818306,
+      "secondary_intensity": 5.303685560940267
+    },
+    {
+      "lead_time": 24,
+      "lat": 17.44402861852607,
+      "lon": 84.4985869746654,
+      "primary_intensity": 15.118764001091076,
+      "secondary_intensity": 6.071580747920357
+    },
+    {
+      "lead_time": 30,
+      "lat": 17.79062153586251,
+      "lon": 83.73983697466541,
+      "primary_intensity": 17.398455001363846,
+      "secondary_intensity": 6.839475934900445
+    },
+    {
+      "lead_time": 36,
+      "lat": 18.12676766377555,
+      "lon": 82.97358697466541,
+      "primary_intensity": 19.678146001636613,
+      "secondary_intensity": 7.607371121880535
+    },
+    {
+      "lead_time": 42,
+      "lat": 18.450961381663603,
+      "lon": 82.1998369746654,
+      "primary_intensity": 21.957837001909382,
+      "secondary_intensity": 7.607371121880535
+    },
+    {
+      "lead_time": 48,
+      "lat": 18.761991376927675,
+      "lon": 81.41858697466542,
+      "primary_intensity": 24.237528002182152,
+      "secondary_intensity": 7.607371121880535
+    },
+    {
+      "lead_time": 54,
+      "lat": 19.058970471507667,
+      "lon": 80.62983697466541,
+      "primary_intensity": 24.237528002182152,
+      "secondary_intensity": 7.607371121880535
+    },
+    {
+      "lead_time": 60,
+      "lat": 19.341357467150583,
+      "lon": 79.83358697466541,
+      "primary_intensity": 24.237528002182152,
+      "secondary_intensity": 7.607371121880535
+    },
+    {
+      "lead_time": 66,
+      "lat": 19.608970471507668,
+      "lon": 79.02983697466541,
+      "primary_intensity": 24.237528002182152,
+      "secondary_intensity": 7.607371121880535
+    },
+    {
+      "lead_time": 72,
+      "lat": 19.861991376927676,
+      "lon": 78.2185869746654,
+      "primary_intensity": 24.237528002182152,
+      "secondary_intensity": 7.607371121880535
+    },
+    {
+      "lead_time": 78,
+      "lat": 20.100961381663602,
+      "lon": 77.3998369746654,
+      "primary_intensity": 24.237528002182152,
+      "secondary_intensity": 7.607371121880535
+    },
+    {
+      "lead_time": 84,
+      "lat": 20.32676766377555,
+      "lon": 76.57358697466542,
+      "primary_intensity": 21.813775201963942,
+      "secondary_intensity": 7.607371121880535
+    },
+    {
+      "lead_time": 90,
+      "lat": 20.54062153586251,
+      "lon": 75.73983697466541,
+      "primary_intensity": 19.390022401745725,
+      "secondary_intensity": 7.607371121880535
+    },
+    {
+      "lead_time": 96,
+      "lat": 20.74402861852607,
+      "lon": 74.8985869746654,
+      "primary_intensity": 16.966269601527504,
+      "secondary_intensity": 6.8466340096924805
+    },
+    {
+      "lead_time": 102,
+      "lat": 20.93875176699431,
+      "lon": 74.04983697466541,
+      "primary_intensity": 14.542516801309294,
+      "secondary_intensity": 6.085896897504428
+    },
+    {
+      "lead_time": 108,
+      "lat": 21.12676766377555,
+      "lon": 73.19358697466541,
+      "primary_intensity": 12.118764001091076,
+      "secondary_intensity": 5.325159785316374
+    },
+    {
+      "lead_time": 114,
+      "lat": 21.31021814617472,
+      "lon": 72.32983697466541,
+      "primary_intensity": 9.695011200872864,
+      "secondary_intensity": 4.5644226731283215
+    },
+    {
+      "lead_time": 120,
+      "lat": 21.491357467150582,
+      "lon": 71.45858697466541,
+      "primary_intensity": 7.271258400654647,
+      "secondary_intensity": 3.8036855609402673
+    }
+  ]
+}

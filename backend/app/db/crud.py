@@ -116,7 +116,16 @@ def save_provenance_record(db: Session, prov_data: Dict[str, Any]) -> Provenance
         db.delete(existing)
         db.commit()
 
-    record = ProvenanceRecord(**prov_data)
+    params = prov_data.get("parameters_json", prov_data.get("parameters", {}))
+    record = ProvenanceRecord(
+        run_id=prov_data["run_id"],
+        dataset_sha256=prov_data["dataset_sha256"],
+        random_seed=prov_data.get("random_seed", 42),
+        model_version=prov_data.get("model_version", "v3.0.0"),
+        execution_duration_sec=prov_data.get("execution_duration_sec", 0.0),
+        pipeline_steps_executed=prov_data.get("pipeline_steps_executed", []),
+        parameters_json=params
+    )
     db.add(record)
     db.commit()
     db.refresh(record)

@@ -55,7 +55,7 @@ export const Phase3ResearchStudio: React.FC<Phase3ResearchStudioProps> = ({ runI
 
   const loadBenchmark = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/benchmark');
+      const res = await fetch('/api/benchmark');
       if (res.ok) {
         const data = await res.json();
         setBenchmark(data);
@@ -68,7 +68,7 @@ export const Phase3ResearchStudio: React.FC<Phase3ResearchStudioProps> = ({ runI
   const runFreshBenchmark = async () => {
     setIsRunningBenchmark(true);
     try {
-      const res = await fetch('http://localhost:8000/api/benchmark/run?num_scenarios=1', { method: 'POST' });
+      const res = await fetch('/api/benchmark/run?num_scenarios=1', { method: 'POST' });
       if (res.ok) {
         const data = await res.json();
         setBenchmark(data);
@@ -84,19 +84,19 @@ export const Phase3ResearchStudio: React.FC<Phase3ResearchStudioProps> = ({ runI
     setIsLoading(true);
     try {
       // 1. ST-GNN
-      const gnnRes = await fetch(`http://localhost:8000/api/research/st-gnn/${runId}`);
-      if (gnnRes.ok) setStGnnData(await gnnRes.ok ? await gnnRes.json() : null);
+      const gnnRes = await fetch(`/api/research/st-gnn/${runId}`);
+      if (gnnRes.ok) setStGnnData(await gnnRes.json());
 
       // 2. Physics Downscaler
-      const piRes = await fetch(`http://localhost:8000/api/research/physics-downscaling/${runId}/${currentLeadTime}`);
+      const piRes = await fetch(`/api/research/physics-downscaling/${runId}/${currentLeadTime}`);
       if (piRes.ok) setPhysicsDownscale(await piRes.json());
 
       // 3. Diffusion
-      const diffRes = await fetch(`http://localhost:8000/api/research/diffusion/${runId}/${currentLeadTime}`);
+      const diffRes = await fetch(`/api/research/diffusion/${runId}/${currentLeadTime}`);
       if (diffRes.ok) setDiffusionData(await diffRes.json());
 
       // 4. Multi-Hypothesis Tracker
-      const mhtRes = await fetch(`http://localhost:8000/api/research/tracking-hypotheses/${runId}`);
+      const mhtRes = await fetch(`/api/research/tracking-hypotheses/${runId}`);
       if (mhtRes.ok) setMhtData(await mhtRes.json());
     } catch (e) {
       console.warn('Research data load notice:', e);

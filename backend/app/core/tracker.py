@@ -165,12 +165,19 @@ class EventTracker:
 
     def _create_new_track(self, track_id: str, det: Dict[str, Any]) -> Dict[str, Any]:
         """Initializes a new trajectory record from a detection."""
+        bbox = det["bounding_box"]
         pt = {
             "lead_time": det["lead_time"],
             "lat": det["centroid_lat"],
             "lon": det["centroid_lon"],
-            "bounding_box": det["bounding_box"],
+            "bounding_box": bbox,
+            "prev_bounding_box": bbox,
+            "bbox_delta": [0.0, 0.0, 0.0, 0.0],
             "area_km2": det["area_km2"],
+            "prev_area_km2": det["area_km2"],
+            "area_expansion_rate_km2h": 0.0,
+            "footprint_evolution": "STABLE",
+            "pixel_count": det.get("pixel_count", 0),
             "peak_precip_mm": det["peak_precip_mm"],
             "mean_precip_mm": det["mean_precip_mm"],
             "peak_efi": det["peak_efi"],
@@ -210,6 +217,27 @@ class EventTracker:
             det["centroid_lat"], det["centroid_lon"]
         ))
 
+        # Dynamic Footprint Evolution
+        curr_bbox = det["bounding_box"]
+        prev_bbox = last_pt["bounding_box"]
+        bbox_delta = [
+            round(curr_bbox[0] - prev_bbox[0], 4),
+            round(curr_bbox[1] - prev_bbox[1], 4),
+            round(curr_bbox[2] - prev_bbox[2], 4),
+            round(curr_bbox[3] - prev_bbox[3], 4),
+        ]
+        
+        curr_area = det["area_km2"]
+        prev_area = last_pt["area_km2"]
+        area_expansion_rate = float((curr_area - prev_area) / dt_hours)
+
+        if area_expansion_rate > 50.0:
+            footprint_evolution = "EXPANDING"
+        elif area_expansion_rate < -50.0:
+            footprint_evolution = "CONTRACTING"
+        else:
+            footprint_evolution = "STEADY"
+
         # Lifecycle determination
         if det["peak_precip_mm"] >= last_pt["peak_precip_mm"] * 1.15:
             state = "INTENSIFICATION"
@@ -222,8 +250,14 @@ class EventTracker:
             "lead_time": lead_time,
             "lat": det["centroid_lat"],
             "lon": det["centroid_lon"],
-            "bounding_box": det["bounding_box"],
-            "area_km2": det["area_km2"],
+            "bounding_box": curr_bbox,
+            "prev_bounding_box": prev_bbox,
+            "bbox_delta": bbox_delta,
+            "area_km2": curr_area,
+            "prev_area_km2": prev_area,
+            "area_expansion_rate_km2h": area_expansion_rate,
+            "footprint_evolution": footprint_evolution,
+            "pixel_count": det.get("pixel_count", 0),
             "peak_precip_mm": det["peak_precip_mm"],
             "mean_precip_mm": det["mean_precip_mm"],
             "peak_efi": det["peak_efi"],

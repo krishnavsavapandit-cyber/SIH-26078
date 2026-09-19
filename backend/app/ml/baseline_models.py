@@ -133,9 +133,9 @@ class MLBaselineTrainer:
                 
             return np.concatenate(inputs_list, axis=0), np.concatenate(targets_list, axis=0)
 
-        train_configs = [("monsoon_depression", 101), ("coastal_cyclone", 102), ("monsoon_depression", 103), ("convective_cluster", 104)]
-        val_configs = [("monsoon_depression", 201)]
-        test_configs = [("monsoon_depression", 301), ("coastal_cyclone", 302)]
+        train_configs = [("monsoon_depression", 101), ("cyclone", 102), ("monsoon_depression", 103), ("extreme_precipitation", 104)]
+        val_configs = [("heat_dome", 201)]
+        test_configs = [("monsoon_depression", 301), ("cyclone", 302)]
 
         x_train, y_train = build_samples_for_events(train_configs)
         x_val, y_val = build_samples_for_events(val_configs)

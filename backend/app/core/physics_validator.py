@@ -185,4 +185,122 @@ class PhysicsValidator:
             summary=summary
         )
 
+    def validate_field(
+        self,
+        field: np.ndarray,
+        variable_name: str = "precipitation",
+        grid_resolution_deg: float = 0.05
+    ) -> Dict[str, Any]:
+        """
+        Validates an individual meteorological array (e.g. 5km downscaled field).
+        """
+        f = np.asarray(field, dtype=np.float64)
+        min_v = float(np.min(f))
+        max_v = float(np.max(f))
+        mean_v = float(np.mean(f))
+        
+        status = "PASS"
+        issues = []
+        
+        if variable_name == "precipitation":
+            if min_v < -1e-4:
+                status = "FAIL"
+                issues.append(f"Negative precipitation detected: min {min_v:.4f}")
+            if max_v > 500.0:
+                status = "WARN"
+                issues.append(f"Extreme precipitation amplitude: max {max_v:.1f} mm/6h")
+        elif variable_name == "mslp":
+            if min_v < 870.0 or max_v > 1050.0:
+                status = "FAIL"
+                issues.append(f"MSLP out of hydrostatic bounds: [{min_v:.1f}, {max_v:.1f}] hPa")
+
+        return {
+            "status": status,
+            "variable": variable_name,
+            "min_value": min_v,
+            "max_value": max_v,
+            "mean_value": mean_v,
+            "grid_resolution_deg": grid_resolution_deg,
+            "issues": issues,
+            "passed": (status in ["PASS", "WARN"])
+        }
+
+    def compute_physics_loss_breakdown(
+        self,
+        precip_pred: np.ndarray,
+        precip_target: np.ndarray,
+        u_wind: Any = None,
+        v_wind: Any = None,
+        mslp: Any = None,
+        temperature_2m: Any = None
+    ) -> Dict[str, float]:
+        """
+        Computes explicit Data Loss vs. Physics Penalty Decomposition.
+        Terms:
+        - data_loss: MSE against target
+        - moisture_flux_loss: Divergence of horizontal moisture transport
+        - geostrophic_loss: Residual of geostrophic wind balance
+        - boundary_penalty: Penalty for negative precipitation or out-of-bound thermodynamic state
+        - total_physics_loss: Weighted sum of physical violations
+        - total_combined_loss: data_loss + lambda * total_physics_loss
+        """
+        p_pred = np.asarray(precip_pred, dtype=np.float64)
+        p_tgt = np.asarray(precip_target, dtype=np.float64)
+
+        # 1. Data Loss (MSE)
+        data_mse = float(np.mean((p_pred - p_tgt) ** 2))
+
+        # 2. Non-negativity and thermodynamic bound penalty
+        neg_penalty = float(np.mean(np.maximum(0.0, -p_pred) ** 2) * 100.0)
+        upper_penalty = float(np.mean(np.maximum(0.0, p_pred - 450.0) ** 2) * 10.0)
+        bound_penalty = neg_penalty + upper_penalty
+
+        # 3. Moisture Flux Divergence Loss (if wind provided)
+        moisture_loss = 0.0
+        if u_wind is not None and v_wind is not None:
+            u = np.asarray(u_wind, dtype=np.float64)
+            v = np.asarray(v_wind, dtype=np.float64)
+            if u.shape == p_pred.shape and v.shape == p_pred.shape:
+                q = np.sqrt(np.maximum(0.0, p_pred))
+                qu = q * u
+                qv = q * v
+                dqu_dx = np.gradient(qu, axis=-1)
+                dqv_dy = np.gradient(qv, axis=-2)
+                div_flux = dqu_dx + dqv_dy
+                moisture_loss = float(np.mean((p_pred * 0.1 - np.maximum(0.0, -div_flux)) ** 2) * 0.05)
+
+        # 4. Geostrophic balance loss (if mslp and wind provided)
+        geostrophic_loss = 0.0
+        if mslp is not None and u_wind is not None and v_wind is not None:
+            m = np.asarray(mslp, dtype=np.float64)
+            u = np.asarray(u_wind, dtype=np.float64)
+            v = np.asarray(v_wind, dtype=np.float64)
+            if m.shape == u.shape == v.shape:
+                dp_dx = np.gradient(m * 100.0, axis=-1)
+                dp_dy = np.gradient(m * 100.0, axis=-2)
+                f_rho = 5e-5 * 1.2
+                u_g = -dp_dy / (f_rho * 1e5 + 1e-4)
+                v_g = dp_dx / (f_rho * 1e5 + 1e-4)
+                geo_residual = (u - u_g) ** 2 + (v - v_g) ** 2
+                geostrophic_loss = float(np.mean(np.clip(geo_residual, 0.0, 100.0)) * 0.01)
+
+        total_physics = bound_penalty + moisture_loss + geostrophic_loss
+        lambda_phys = 0.15
+        total_loss = data_mse + lambda_phys * total_physics
+
+        return {
+            "data_loss_mse": data_mse,
+            "data_loss_mae": float(np.mean(np.abs(p_pred - p_tgt))),
+            "boundary_penalty": bound_penalty,
+            "moisture_flux_loss": moisture_loss,
+            "geostrophic_loss": geostrophic_loss,
+            "total_physics_penalty": total_physics,
+            "lambda_physics_weight": lambda_phys,
+            "total_combined_loss": total_loss,
+            "physics_data_ratio": float(total_physics / (data_mse + 1e-6))
+        }
+
+
 physics_validator = PhysicsValidator()
+
+

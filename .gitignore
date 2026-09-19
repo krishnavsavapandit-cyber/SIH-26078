@@ -1,4 +1,4 @@
-# Python
+# Python temporary & bytecode
 __pycache__/
 *.py[cod]
 *$py.class
@@ -7,20 +7,17 @@ __pycache__/
 .coverage
 htmlcov/
 
-# Node
+# Node dependencies & caches
 node_modules/
-dist/
-build/
 .npm/
 
-# Data artifacts
+# Large transient NetCDF training chunks generated dynamically during local runs
+# (Preserves essential test datasets in data/ and model checkpoints in backend/storage/models/)
 backend/storage/datasets/*.nc
-backend/storage/datasets/*.json
-backend/storage/*.db
-backend/storage/models/*.pt
 
-# OS / IDE
+# OS / Editor caches
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
+*.log

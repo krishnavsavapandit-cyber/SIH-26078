@@ -48,6 +48,28 @@ class UncertaintyEngine:
             "cv": cv.astype(np.float32)
         }
 
+    def compute_exceedance_probabilities(
+        self,
+        ds: xr.Dataset,
+        variable: str = "precipitation",
+        thresholds: List[float] = [25.0, 50.0, 100.0]
+    ) -> Dict[str, np.ndarray]:
+        """
+        Computes spatial probability of exceedance fields across lead times:
+        P(variable >= threshold) = (1/M) sum_{m=1}^M I(variable_m >= threshold).
+        """
+        data = ds[variable].values
+        if data.ndim == 3:
+            data = data[:, np.newaxis, :, :]
+
+        probs = {}
+        for thresh in thresholds:
+            key = f"prob_ge_{int(thresh)}mm" if variable == "precipitation" else f"prob_ge_{int(thresh)}"
+            prob_field = np.mean((data >= thresh).astype(np.float32), axis=1)
+            probs[key] = prob_field
+
+        return probs
+
     def compute_track_uncertainty_cone(
         self,
         ds: xr.Dataset,
@@ -57,7 +79,12 @@ class UncertaintyEngine:
         Calculates ensemble member spaghetti trajectories and the composite uncertainty cone.
         """
         lead_times = ds["lead_time"].values
-        num_members = len(ds["ensemble_member"])
+        if "ensemble_member" in ds.coords or "ensemble_member" in ds.dims:
+            num_members = len(ds["ensemble_member"])
+        elif "member" in ds.coords or "member" in ds.dims:
+            num_members = len(ds["member"])
+        else:
+            num_members = 1
         
         member_tracks: List[List[Dict[str, Any]]] = [[] for _ in range(num_members)]
         cone_points: List[Dict[str, Any]] = []

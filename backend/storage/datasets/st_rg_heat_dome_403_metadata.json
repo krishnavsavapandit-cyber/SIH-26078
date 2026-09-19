@@ -1,0 +1,199 @@
+{
+  "event_id": "EVT_3226",
+  "event_name": "Severe Synoptic Heat Dome",
+  "scenario_type": "heat_dome",
+  "start_lat": 25.97893424886819,
+  "start_lon": 75.040563422288,
+  "peak_anomaly_k": 7.814684774123927,
+  "trajectory": [
+    {
+      "lead_time": 0,
+      "lat": 25.97893424886819,
+      "lon": 75.040563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 3.0,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 6,
+      "lat": 26.06893424886819,
+      "lon": 75.165563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 3.802447462353988,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 12,
+      "lat": 26.15893424886819,
+      "lon": 75.290563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 4.604894924707976,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 18,
+      "lat": 26.24893424886819,
+      "lon": 75.415563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 5.407342387061964,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 24,
+      "lat": 26.33893424886819,
+      "lon": 75.540563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 6.209789849415952,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 30,
+      "lat": 26.428934248868188,
+      "lon": 75.665563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 7.0122373117699395,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 36,
+      "lat": 26.518934248868188,
+      "lon": 75.790563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 7.814684774123927,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 42,
+      "lat": 26.608934248868188,
+      "lon": 75.915563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 7.814684774123927,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 48,
+      "lat": 26.698934248868188,
+      "lon": 76.040563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 7.814684774123927,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 54,
+      "lat": 26.788934248868188,
+      "lon": 76.165563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 7.814684774123927,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 60,
+      "lat": 26.878934248868187,
+      "lon": 76.290563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 7.814684774123927,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 66,
+      "lat": 26.968934248868187,
+      "lon": 76.415563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 7.814684774123927,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 72,
+      "lat": 27.05893424886819,
+      "lon": 76.540563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 7.814684774123927,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 78,
+      "lat": 27.14893424886819,
+      "lon": 76.665563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 7.814684774123927,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 84,
+      "lat": 27.23893424886819,
+      "lon": 76.790563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 7.814684774123927,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 90,
+      "lat": 27.32893424886819,
+      "lon": 76.915563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 7.814684774123927,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 96,
+      "lat": 27.41893424886819,
+      "lon": 77.040563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 7.033216296711534,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 102,
+      "lat": 27.50893424886819,
+      "lon": 77.165563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 6.251747819299142,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 108,
+      "lat": 27.59893424886819,
+      "lon": 77.290563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 5.470279341886749,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 114,
+      "lat": 27.68893424886819,
+      "lon": 77.415563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 4.688810864474357,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    },
+    {
+      "lead_time": 120,
+      "lat": 27.77893424886819,
+      "lon": 77.540563422288,
+      "intensity_deficit_hpa": 0.0,
+      "temp_anomaly_k": 3.9073423870619637,
+      "max_wind_ms": 12.0,
+      "peak_precip_mm6h": 0.0
+    }
+  ]
+}

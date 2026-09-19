@@ -1,0 +1,178 @@
+{
+  "event_id": "EVT_4703",
+  "event_name": "Deep Monsoon Depression (Bay of Bengal)",
+  "scenario_type": "cyclone",
+  "start_lat": 17.76786589084755,
+  "start_lon": 88.75963764331631,
+  "peak_deficit_hpa": 18.240430719625625,
+  "trajectory": [
+    {
+      "lead_time": 0,
+      "lat": 17.76786589084755,
+      "lon": 88.75963764331631,
+      "intensity_deficit_hpa": 6.0,
+      "max_wind_ms": 13.200000000000001,
+      "peak_precip_mm6h": 74.0
+    },
+    {
+      "lead_time": 6,
+      "lat": 18.136726569871687,
+      "lon": 88.03088764331632,
+      "intensity_deficit_hpa": 7.530053839953203,
+      "max_wind_ms": 16.566118447897047,
+      "peak_precip_mm6h": 83.94534995969582
+    },
+    {
+      "lead_time": 12,
+      "lat": 18.503276087472518,
+      "lon": 87.2946376433163,
+      "intensity_deficit_hpa": 9.060107679906405,
+      "max_wind_ms": 19.932236895794095,
+      "peak_precip_mm6h": 93.89069991939164
+    },
+    {
+      "lead_time": 18,
+      "lat": 18.865260190691277,
+      "lon": 86.55088764331632,
+      "intensity_deficit_hpa": 10.59016151985961,
+      "max_wind_ms": 23.298355343691142,
+      "peak_precip_mm6h": 103.83604987908747
+    },
+    {
+      "lead_time": 24,
+      "lat": 19.220537042223036,
+      "lon": 85.7996376433163,
+      "intensity_deficit_hpa": 12.120215359812812,
+      "max_wind_ms": 26.66447379158819,
+      "peak_precip_mm6h": 113.78139983878329
+    },
+    {
+      "lead_time": 30,
+      "lat": 19.567129959559477,
+      "lon": 85.04088764331631,
+      "intensity_deficit_hpa": 13.650269199766015,
+      "max_wind_ms": 30.030592239485234,
+      "peak_precip_mm6h": 123.72674979847909
+    },
+    {
+      "lead_time": 36,
+      "lat": 19.903276087472516,
+      "lon": 84.27463764331631,
+      "intensity_deficit_hpa": 15.180323039719218,
+      "max_wind_ms": 33.39671068738228,
+      "peak_precip_mm6h": 133.6720997581749
+    },
+    {
+      "lead_time": 42,
+      "lat": 20.22746980536057,
+      "lon": 83.5008876433163,
+      "intensity_deficit_hpa": 16.71037687967242,
+      "max_wind_ms": 36.762829135279325,
+      "peak_precip_mm6h": 143.61744971787073
+    },
+    {
+      "lead_time": 48,
+      "lat": 20.538499800624642,
+      "lon": 82.71963764331632,
+      "intensity_deficit_hpa": 18.240430719625625,
+      "max_wind_ms": 40.12894758317638,
+      "peak_precip_mm6h": 153.56279967756655
+    },
+    {
+      "lead_time": 54,
+      "lat": 20.835478895204634,
+      "lon": 81.93088764331631,
+      "intensity_deficit_hpa": 18.240430719625625,
+      "max_wind_ms": 40.12894758317638,
+      "peak_precip_mm6h": 153.56279967756655
+    },
+    {
+      "lead_time": 60,
+      "lat": 21.11786589084755,
+      "lon": 81.13463764331631,
+      "intensity_deficit_hpa": 18.240430719625625,
+      "max_wind_ms": 40.12894758317638,
+      "peak_precip_mm6h": 153.56279967756655
+    },
+    {
+      "lead_time": 66,
+      "lat": 21.385478895204635,
+      "lon": 80.33088764331632,
+      "intensity_deficit_hpa": 18.240430719625625,
+      "max_wind_ms": 40.12894758317638,
+      "peak_precip_mm6h": 153.56279967756655
+    },
+    {
+      "lead_time": 72,
+      "lat": 21.638499800624643,
+      "lon": 79.5196376433163,
+      "intensity_deficit_hpa": 18.240430719625625,
+      "max_wind_ms": 40.12894758317638,
+      "peak_precip_mm6h": 153.56279967756655
+    },
+    {
+      "lead_time": 78,
+      "lat": 21.87746980536057,
+      "lon": 78.7008876433163,
+      "intensity_deficit_hpa": 18.240430719625625,
+      "max_wind_ms": 40.12894758317638,
+      "peak_precip_mm6h": 153.56279967756655
+    },
+    {
+      "lead_time": 84,
+      "lat": 22.103276087472516,
+      "lon": 77.87463764331632,
+      "intensity_deficit_hpa": 16.416387647663065,
+      "max_wind_ms": 36.11605282485875,
+      "peak_precip_mm6h": 141.70651970980992
+    },
+    {
+      "lead_time": 90,
+      "lat": 22.317129959559477,
+      "lon": 77.04088764331631,
+      "intensity_deficit_hpa": 14.592344575700501,
+      "max_wind_ms": 32.103158066541106,
+      "peak_precip_mm6h": 129.85023974205325
+    },
+    {
+      "lead_time": 96,
+      "lat": 22.520537042223037,
+      "lon": 76.19963764331631,
+      "intensity_deficit_hpa": 12.768301503737936,
+      "max_wind_ms": 28.090263308223463,
+      "peak_precip_mm6h": 117.99395977429658
+    },
+    {
+      "lead_time": 102,
+      "lat": 22.71526019069128,
+      "lon": 75.35088764331631,
+      "intensity_deficit_hpa": 10.944258431775376,
+      "max_wind_ms": 24.077368549905827,
+      "peak_precip_mm6h": 106.13767980653995
+    },
+    {
+      "lead_time": 108,
+      "lat": 22.903276087472516,
+      "lon": 74.49463764331631,
+      "intensity_deficit_hpa": 9.120215359812812,
+      "max_wind_ms": 20.06447379158819,
+      "peak_precip_mm6h": 94.28139983878327
+    },
+    {
+      "lead_time": 114,
+      "lat": 23.086726569871686,
+      "lon": 73.63088764331631,
+      "intensity_deficit_hpa": 7.296172287850252,
+      "max_wind_ms": 16.051579033270556,
+      "peak_precip_mm6h": 82.42511987102664
+    },
+    {
+      "lead_time": 120,
+      "lat": 23.26786589084755,
+      "lon": 72.75963764331631,
+      "intensity_deficit_hpa": 5.472129215887688,
+      "max_wind_ms": 12.038684274952914,
+      "peak_precip_mm6h": 70.56883990326997
+    }
+  ]
+}

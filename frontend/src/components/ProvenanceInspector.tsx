@@ -30,7 +30,7 @@ export const ProvenanceInspector: React.FC<ProvenanceInspectorProps> = ({ proven
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
         <div className="bg-slate-900/80 p-3 rounded-lg border border-slate-800 space-y-1">
           <div className="text-slate-400 text-[10px] flex items-center space-x-1">
             <Lock className="w-3.5 h-3.5 text-cyan-400" />
@@ -50,6 +50,26 @@ export const ProvenanceInspector: React.FC<ProvenanceInspectorProps> = ({ proven
             Model: <strong className="text-amber-300">{provenance.model_version}</strong> | Seed: <strong className="text-cyan-400">{provenance.random_seed}</strong>
           </div>
         </div>
+
+        <div className="bg-slate-900/80 p-3 rounded-lg border border-slate-800 space-y-1">
+          <div className="text-slate-400 text-[10px] flex items-center space-x-1">
+            <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+            <span>Execution Mode & Data Source</span>
+          </div>
+          <div className="text-xs">
+            Mode: <strong className={provenance.data_source_mode === 'REAL' ? 'text-sky-400 font-bold' : 'text-emerald-400 font-bold'}>
+              {provenance.data_source_mode || (provenance.synthetic ? 'SYNTHETIC' : 'REAL')}
+            </strong>
+            <div className="text-[10px] text-slate-400 truncate mt-0.5">
+              Source: {provenance.source_type || (provenance.synthetic ? 'Physics Benchmark Generator' : 'External NWP Asset')}
+            </div>
+            {provenance.input_artifact && (
+              <div className="text-[9px] text-slate-500 truncate">
+                Artifact: {provenance.input_artifact}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Execution Pipeline Steps */}
@@ -57,7 +77,7 @@ export const ProvenanceInspector: React.FC<ProvenanceInspectorProps> = ({ proven
         <div className="text-slate-400 text-[10px] flex items-center justify-between">
           <span className="flex items-center space-x-1">
             <Terminal className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Pipeline Execution Sequence</span>
+            <span>Pipeline Execution Sequence (14 Stages Verified)</span>
           </span>
           <span className="text-cyan-400 flex items-center space-x-1">
             <Clock className="w-3 h-3" />

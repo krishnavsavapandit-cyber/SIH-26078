@@ -117,7 +117,7 @@ class TestPhase3ResearchSuite(unittest.TestCase):
         """Verifies DDPM forward noise addition and reverse conditional denoising loop."""
         engine = diffusion_engine
         x_0 = torch.randn(1, 1, 32, 32, device=self.device)
-        t = torch.tensor([10], device=self.device)
+        t = torch.tensor([min(5, engine.timesteps - 1)], device=self.device)
         x_t, noise = engine.q_sample(x_0, t)
         self.assertEqual(x_t.shape, x_0.shape)
 

@@ -1,6 +1,53 @@
 /**
  * Typed API Client for SIH-26078 Weather Intelligence System.
+ * Supports dual-mode REAL vs SYNTHETIC telemetry, live status synchronization,
+ * GRIB2/NetCDF ingestion, and provenance verification.
  */
+
+export type DataSourceMode = 'REAL' | 'SYNTHETIC';
+
+export interface DiscoveredDataset {
+  file_path: string;
+  filename: string;
+  sha256: string;
+  size_bytes: number;
+  detected_format: string;
+  source_type: string;
+  source_label: string;
+  is_supported: boolean;
+  is_synthetic: boolean;
+  is_valid_for_pipeline: boolean;
+  validation_status: 'VALIDATED' | 'VALIDATION_FAILED' | 'FAILED';
+  missing_required_variables?: string[];
+  failure_reason?: string;
+  variables?: string[];
+  lead_times?: number[];
+  reference_time?: string;
+}
+
+export interface DataModeStatus {
+  status: string;
+  active_mode: DataSourceMode;
+  is_real_data_available: boolean;
+  preferred_real_dataset: string | null;
+  discovered_datasets_count: number;
+  discovered_datasets: DiscoveredDataset[];
+  active_run_metadata?: {
+    run_id: string;
+    data_source_mode: DataSourceMode;
+    source_type: string;
+    source_name: string;
+    synthetic: boolean;
+    dataset_sha256: string;
+    input_artifact: string;
+    variables: string[];
+  };
+  supported_adapters: {
+    execution_modes: string[];
+    supported_formats: { format: string; status: string; parser: string }[];
+    mandatory_variables: string[];
+  };
+}
 
 export interface TrajectoryPoint {
   lead_time: number;
@@ -137,6 +184,10 @@ export interface ProvenanceRecord {
   execution_duration_sec: number;
   pipeline_steps_executed: string[];
   parameters: Record<string, any>;
+  data_source_mode?: DataSourceMode;
+  synthetic?: boolean;
+  source_type?: string;
+  input_artifact?: string;
   created_at: string;
 }
 
@@ -170,6 +221,22 @@ const API_BASE = '/api';
 export const api = {
   getHealth: async () => {
     const res = await fetch(`${API_BASE}/health`);
+    return res.json();
+  },
+  getDataModeStatus: async (): Promise<DataModeStatus> => {
+    const res = await fetch(`${API_BASE}/data/mode-status`);
+    return res.json();
+  },
+  discoverDatasets: async (): Promise<DiscoveredDataset[]> => {
+    const res = await fetch(`${API_BASE}/data/discover`);
+    return res.json();
+  },
+  inspectDataset: async (filePath: string) => {
+    const res = await fetch(`${API_BASE}/data/inspect`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ file_path: filePath }),
+    });
     return res.json();
   },
   getRuns: async () => {
@@ -215,12 +282,44 @@ export const api = {
     seed: number;
     displacement_bias_km?: number;
     intensity_bias_pct?: number;
+    data_source_mode?: string;
+    external_data_path?: string;
+    allow_synthetic_fallback?: boolean;
   }) => {
     const res = await fetch(`${API_BASE}/pipeline/run`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),
     });
+    return res.json();
+  },
+  runFlagshipPipeline: async (params: {
+    run_id: string;
+    scenario_type?: string;
+    seed?: number;
+    enable_phase3?: boolean;
+    inject_failure?: boolean;
+    data_source_mode?: 'auto' | 'REAL' | 'SYNTHETIC';
+    external_data_path?: string;
+    allow_synthetic_fallback?: boolean;
+  }) => {
+    const res = await fetch(`${API_BASE}/pipeline/flagship-run`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
+    return res.json();
+  },
+  getDataAdapterInfo: async () => {
+    const res = await fetch(`${API_BASE}/data-adapter/info`);
+    return res.json();
+  },
+  getExtremePreservationMicroscope: async (runId: string, leadTime: number) => {
+    const res = await fetch(`${API_BASE}/microscope/extreme-preservation/${runId}/${leadTime}`);
+    return res.json();
+  },
+  getEventFootprintHistory: async (eventId: string) => {
+    const res = await fetch(`${API_BASE}/events/${eventId}/footprint-history`);
     return res.json();
   }
 };
