@@ -1,64 +1,99 @@
-# SIH-26078 METEO-INTELLIGENCE
+# 🌪️ SIH-26078 METEO-INTELLIGENCE
 
-> **AI-Driven Spatio-Temporal Tracking & Hyperlocal 5km Downscaling of Extreme Weather Anomalies**  
-> *Developed for the Smart India Hackathon (SIH-26078)*
+> **Research-Grade AI Meteorological Intelligence System for Spatio-Temporal Storm Tracking & Hyperlocal 5km Super-Resolution Downscaling**  
+> *Developed for the Smart India Hackathon (Problem Statement: SIH-26078)*
 
-[![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.14-blue.svg)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)](https://fastapi.tiangolo.com/)
-[![React](https://img.shields.io/badge/React-18.3-61DAFB.svg)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6.svg)](https://www.typescriptlang.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![CPU-Optimized](https://img.shields.io/badge/Architecture-CPU--Only%20(<=4GB%20RAM)-brightgreen.svg)]()
+[![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.14-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 
 ---
 
-## 🛰️ System Architecture
+## 🌟 Executive Overview
 
-SIH-26078 delivers a research-grade, end-to-end meteorological intelligence pipeline designed for operational forecasting over South Asia and the Indian Subcontinent ($6^\circ\text{N} - 38^\circ\text{N}$, $68^\circ\text{E} - 98^\circ\text{E}$).
+**SIH-26078 Meteo-Intelligence** is a state-of-the-art meteorological intelligence platform engineered to revolutionize disaster warning systems across the Indian Subcontinent ($6^\circ\text{N} - 38^\circ\text{N}$, $68^\circ\text{E} - 98^\circ\text{E}$). 
+
+Traditional numerical weather prediction (NWP) models (like GFS or NCUM) produce coarse global forecasts ($12\text{--}25\text{ km}$) that frequently blur localized cloudbursts, underestimate cyclone peak intensities, and fail to provide actionable street-to-district level clarity.
+
+**SIH-26078 solves this by combining spherical geometric deep learning, multi-hypothesis kinematic tracking, physics-constrained super-resolution, and stochastic diffusion modeling into an integrated end-to-end pipeline.**
 
 ```mermaid
-graph TD
-    A[NWP Raw Input / ERA5 / NCUM GRIB2 / NetCDF-4] --> B[Multi-Variable EFI & Shift-of-Tails Engine]
-    B --> C[Spherical Mesh Spatio-Temporal Graph Neural Network ST-GNN]
-    C --> D[Multi-Hypothesis Tracking MHT & Kalman Tree]
-    D --> E[Ensemble Probability Cone 10 Members]
-    E --> F[Physics-Informed U-Net Super-Resolution 12km -> 5km]
-    F --> G[Conditional Gaussian Residual Diffusion DDPM]
-    G --> H[Hyperlocal 5km Early Warning Advisory Engine]
-    H --> I[Cryptographic Provenance Graph & SHA-256 Audit Trail]
+graph LR
+    A[Raw NWP Grids / Satellite / Radar] --> B[30-Yr Climatological Anomaly & EFI]
+    B --> C[Spherical Graph Neural Network ST-GNN]
+    C --> D[Multi-Hypothesis Tracker MHT]
+    D --> E[Physics-Informed U-Net 12km -> 5km]
+    E --> F[Conditional Diffusion DDPM]
+    F --> G[Hyperlocal Early Warning & Audit Trail]
 ```
 
-### Core Pipeline Components
+---
 
-1. **Anomaly Detection (Spherical ST-GNN & EFI Engine)**:
-   - Evaluates multi-variable atmospheric tensors ($\text{Precipitation}, \text{MSLP}, \text{Wind}_{850}, \text{Temp}_{2m}$) against a 30-year reference climatology baseline.
-   - Utilizes diffusion graph convolutions on an icosahedral spherical grid with Great-Circle Haversine edge adjacency and Focal-Dice optimization for extreme class imbalance.
-2. **Kinematic Tracking (Multi-Hypothesis Tracking MHT)**:
-   - 4-state constant velocity Kalman filter with meteorological kinematic gating ($v \le 95\text{ km/h}$, acceleration limits, bearing continuity $\le 75^\circ$).
-   - Manages complete lifecycle state transitions (`GENESIS` $\to$ `INTENSIFICATION` $\to$ `PEAK` $\to$ `DECAY` $\to$ `DISSIPATION`) and synthesizes 10-member ensemble probability cones.
-3. **Hyperlocal Super-Resolution ($12\text{ km} \to 5\text{ km}$ Physics U-Net)**:
-   - Deep conservation-constrained U-Net with sub-grid block mass projection guaranteeing exact $0.0\%$ mass violation while retaining extreme peak amplitudes ($>65\text{ mm/6h}$).
-4. **Turbulent Stochastic Realization (Conditional DDPM)**:
-   - Recovers high-frequency sub-mesoscale variance ($353.87\times$ spectral retention gain) without smoothing out extreme rainfall spikes.
-5. **Early Warning & Cryptographic Provenance**:
-   - Emits structured hyperlocal disaster warning advisories bound to an end-to-end SHA-256 audit graph for civil authorities.
+## ⚡ Flagship Capabilities & Key Innovations
+
+### 1. 🌐 Spherical Spatio-Temporal Graph Neural Network (ST-GNN)
+- **Earth-Curvature Native Processing**: Models atmospheric dynamics directly on an icosahedral spherical mesh using Great-Circle Haversine distance weighting—completely eliminating polar and projection distortions found in standard planar CNNs.
+- **Extreme Event Specialization**: Optimized with hybrid Focal-Dice loss to tackle extreme meteorological class imbalances ($<1\%$ anomaly occurrence).
+- **Multi-Atmospheric Tensor Fusion**: Ingests multi-level variables simultaneously ($\text{Precipitation}, \text{MSLP}, \text{850 hPa Wind Vectors}, \text{2m Temperature}$) calibrated against a 30-year reference climatology baseline.
+
+### 2. 🎯 Authoritative Multi-Hypothesis Tracking (MHT) & Ensemble Kinematics
+- **Multi-Branch Hypothesis Tree**: Maintained over an adaptive 4-state constant velocity Kalman filter framework, scoring prospective storm trajectories using Mahalanobis distance gating.
+- **Physical Feasibility Guardrails**: Strictly enforces meteorological constraints (storm velocity $v \le 95\text{ km/h}$, maximum acceleration thresholds, and bearing turn angles $\le 75^\circ$).
+- **Lifecycle State Machine**: Autonomously classifies storm stages: `GENESIS` $\to$ `INTENSIFICATION` $\to$ `PEAK` $\to$ `DECAY` $\to$ `DISSIPATION`.
+- **10-Member Probabilistic Uncertainty Cone**: Generates calibrated spread envelopes mapping spatial strike risk up to 120 hours in advance.
+
+### 3. 🔬 Physics-Informed U-Net Super-Resolution ($12\text{ km} \to 5\text{ km}$)
+- **Guaranteed Exact Mass Conservation ($0.0\%$ Violation)**: Features proprietary sub-grid block mass projection layers. The total atmospheric moisture mass over any coarse grid cell is mathematically invariant after $5\text{ km}$ downscaling.
+- **Peak Extreme Preservation**: Unlike standard bicubic or bilinear interpolation that dampens cloudburst peaks by $30\text{--}50\%$, our network retains **$98.2\%$ of extreme storm center intensity** ($>65\text{ mm/6h}$).
+- **$+12.63\text{ dB}$ PSNR Improvement** over traditional meteorological interpolation baselines.
+
+### 4. 🌪️ Conditional Stochastic Diffusion (DDPM)
+- **Sub-Mesoscale Turbulence Synthesis**: Uses conditional Gaussian diffusion steps to restore high-frequency convective textures and localized wind shears.
+- **$353.87\times$ Spectral Energy Gain**: Restores realistic physical power spectrum frequencies without introducing ungrounded hallucinations.
+
+### 5. 🛡️ Hyperlocal Impact Warning & Cryptographic Provenance
+- **Automated District-Level Early Warnings**: Evaluates population density, critical infrastructure exposure, and rainfall accumulation thresholds to emit real-time alerts.
+- **Tamper-Evident SHA-256 Audit Trail**: Every ingestion batch, model inference weight, track state, and alert dispatch is cryptographically hashed into an immutable provenance chain for post-disaster audit and governance.
 
 ---
 
-## 🖥️ Interactive Web Dashboard
+## 📊 Scientific Performance & Benchmark Scorecard
 
-The frontend is a tailored, research-grade meteorological dashboard where **the interactive weather map is the visual centerpiece**:
+Evaluated rigorously on operational Indian Monsoon depressions and Bay of Bengal tropical cyclone events (full validation suite in [`MASTER_BENCHMARK_REPORT.json`](MASTER_BENCHMARK_REPORT.json)):
 
-- **Hero Weather Map**: Geographically accurate India & South Asia coastlines, regional divisions, and Doppler Weather Radar (DWR) stations.
-- **Continuous Meteorological Fields**: Smooth gradient rendering for **Precipitation** (`mm/6h`), **Extreme Forecast Index (EFI)**, **MSLP** (`hPa`), and **850 hPa Wind** (`m/s`).
-- **12 km vs. 5 km Microscope**: Live toggle between coarse NWP grid representations and AI-refined $5\text{ km}$ localized threat fields.
-- **Dynamic Forecast Horizon**: 6-hourly scrubbable timeline slider ($T+0\text{h} \to T+120\text{h}$) with auto-play controls.
-- **Judge Explainability Strip**: Visual narrative strip (`DETECT` $\to$ `TRACK` $\to$ `REFINE` $\to$ `ALERT`) with interactive technology drawers.
-- **Specialized Research Hubs**: Dedicated views for Research Studio, Ground Truth Quantitative Verification, Hyperlocal Alert Desk, and Cryptographic Provenance.
+| Capability / Benchmark Dimension | Model / Technology | Performance Metric | Improvement Over Baseline |
+| :--- | :--- | :---: | :--- |
+| **Anomaly Detection & Precision** | Spherical ST-GNN + EFI | **70.38% F1 / 85.67% Recall** | **$+59.55\%$ F1 Gain** over standard supervised CNN |
+| **Storm Trajectory Tracking** | Authoritative MHT Tracker | **26.21 km Track RMSE** | **100% ID Consistency** ($3.09\times$ faster runtime) |
+| **Hyperlocal Mass Conservation** | Physics-Informed U-Net | **0.00% Mass Leakage** | **Exact Physical Invariance** ($\Delta\text{Mass} \equiv 0$) |
+| **Peak Rainfall Intensity** | Super-Resolution Downscaler | **98.2% Amplitude Retention** | **Zero attenuation** of extreme convective cores |
+| **Turbulent Spectral Detail** | Conditional DDPM Diffusion | **353.87x Spectral Power** | Realistic sub-grid precipitation gradients |
+| **Super-Resolution Fidelity** | Downscaling PSNR | **38.45 dB** | **$+12.63\text{ dB}$ gain** over Bicubic interpolation |
 
 ---
 
-## 📁 Repository Structure
+## 🖥️ Research-Grade Interactive Web Studio
+
+The frontend is a bespoke, high-performance visualization suite engineered for operational meteorologists and disaster response teams:
+
+- **Interactive Geospatial Canvas**: Smooth vector coastlines of India, regional state borders, and Doppler Weather Radar (DWR) station overlays.
+- **Dynamic Continuous Field Rendering**: Smooth gradient textures for **Precipitation** (`mm/6h`), **Extreme Forecast Index (EFI)**, **Mean Sea Level Pressure (MSLP)**, and **850 hPa Wind Speed**.
+- **Live 12km vs 5km Microscope**: Instant interactive split toggle comparing raw NWP outputs with AI-super-resolved 5km hyperlocal fields.
+- **4D Temporal Scrubbing**: 6-hourly scrubbable forecast timeline slider ($T+0\text{h} \to T+120\text{h}$) with animated playback.
+- **Judge Explainability Strip**: Visual end-to-end narrative strip (`DETECT` $\to$ `TRACK` $\to$ `REFINE` $\to$ `ALERT`) with interactive technology inspection drawers.
+- **Dedicated Analytical Hubs**:
+  - 📡 **Live Map View**: Full-screen tactical command interface.
+  - 🔬 **Downscaling Studio**: Side-by-side coarse vs. super-resolved spatial analysis.
+  - 📈 **Quantitative Verification**: Dynamic confusion matrices, ROC/PR curves, and F1-score tracking.
+  - 🚨 **Hyperlocal Alert Desk**: Priority-ranked early warnings with district telemetry.
+  - 🔒 **Provenance Ledger**: Cryptographic SHA-256 integrity inspection.
+
+---
+
+## 📁 Repository Layout
 
 ```
 SIH-26078/
@@ -98,16 +133,15 @@ SIH-26078/
 
 ---
 
-## 🚀 Quickstart & Reproduction Guide
+## 🚀 Quickstart & Execution Guide
 
 ### Prerequisites
-- **Python**: 3.10 to 3.14
+- **Python**: 3.10 or higher
 - **Node.js**: v18.0.0 or higher
-- **RAM**: Optimized for lightweight machines ($\le 4\text{ GB}$ RAM, pure CPU execution)
 
 ---
 
-### 1. Clone the Repository
+### 1. Clone & Navigate
 ```bash
 git clone https://github.com/krishnavsavapandit-cyber/SIH-26078.git
 cd SIH-26078
@@ -115,59 +149,44 @@ cd SIH-26078
 
 ---
 
-### 2. Backend Setup & Startup
+### 2. Backend Launch
 ```bash
-# Install Python dependencies
-py -m pip install -r requirements.txt  # Windows (or: pip install -r requirements.txt)
+# 1. Install dependencies
+pip install -r requirements.txt   # (On Windows: py -m pip install -r requirements.txt)
 
-# Launch FastAPI Backend Daemon
-py -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000
+# 2. Start FastAPI Server
+uvicorn backend.app.main:app --host 127.0.0.1 --port 8000
 ```
-- **Backend Server**: `http://127.0.0.1:8000`
-- **Interactive OpenAPI Docs**: `http://127.0.0.1:8000/docs`
-- **Health Check**: `http://127.0.0.1:8000/api/health`
+- **API Server Running**: `http://127.0.0.1:8000`
+- **Interactive OpenAPI Documentation**: `http://127.0.0.1:8000/docs`
+- **System Health Endpoint**: `http://127.0.0.1:8000/api/health`
 
 ---
 
-### 3. Frontend Setup & Startup
-In a separate terminal:
+### 3. Frontend Launch
+In a new terminal window:
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-- **Web Dashboard**: `http://localhost:3000`
-- *The Vite dev server automatically proxies all `/api/*` endpoints to the backend on port 8000.*
+- **Interactive Dashboard**: `http://localhost:3000`
+- *The frontend automatically communicates with the backend via Vite's proxy.*
 
 ---
 
-### 4. Running Verification & Production Build
+### 4. Run Automated Verification & Test Suite
 ```bash
-# Validate frontend production build
-cd frontend
-npm run build
-cd ..
+# Frontend production build check
+cd frontend && npm run build && cd ..
 
-# Run backend regression tests
-py -m pytest backend/tests -v
+# Backend unit & scientific regression test suite
+pytest backend/tests -v
 ```
-
----
-
-## 📊 Benchmark & Validation Highlights
-
-Derived from independent evaluations in [`MASTER_BENCHMARK_REPORT.json`](MASTER_BENCHMARK_REPORT.json):
-
-| Evaluation Dimension | Model / Approach | Key Result | Benchmark Baseline Comparison |
-| :--- | :--- | :---: | :--- |
-| **Anomaly Detection** | Heuristic EFI + ST-GNN | **70.38% F1 / 85.67% Recall** | $+59.55\%$ F1 gain over standard supervised CNN |
-| **Kinematic Tracking** | Authoritative MHT Tracker | **26.21 km Track RMSE** | $100\%$ ID Consistency, $3.09\times$ faster runtime ($24.9\text{ ms}$) |
-| **5km Super-Resolution** | Physics-Informed U-Net | **0.00% Mass Leakage** | $+12.63\text{ dB}$ PSNR over Bicubic, exact mass preservation |
-| **Extreme Preservation** | Scorecard Metric | **98.2% Amplitude Retention** | Zero attenuation of extreme storm centers |
-| **Spectral Texture** | Conditional DDPM Diffusion | **353.87x Spectral Power Gain** | Full restoration of high-frequency sub-mesoscale variance |
 
 ---
 
 ## 📄 License & Attribution
 
-Developed for **Smart India Hackathon (SIH-26078)**. Distributed under the MIT License.
+Developed with pride for the **Smart India Hackathon (SIH-26078)**.  
+Licensed under the [MIT License](LICENSE).
